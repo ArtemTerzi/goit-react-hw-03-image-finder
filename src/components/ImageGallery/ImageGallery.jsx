@@ -76,6 +76,7 @@ class ImageGallery extends Component {
   };
 
   render() {
+    const { status, images, modalImg, isModalOpen } = this.state;
     return (
       <>
         <ul className={sass.imageGallery}>
@@ -90,18 +91,13 @@ class ImageGallery extends Component {
             );
           })}
         </ul>
-        {this.state.status === 'pending' && <Loader />}
-        {this.state.status !== 'idle' &&
-          this.state.status !== 'pending' &&
-          this.state.images.length !== 0 && (
-            <Button onLoadMore={this.onLoadMore} />
-          )}
-        {this.state.status === 'rejected' && <Error />}
-        {this.state.isModalOpen && (
-          <Modal
-            largeImage={this.state.modalImg}
-            closeModal={this.closeModal}
-          />
+        {status === 'pending' && <Loader />}
+        {status !== 'idle' && status !== 'pending' && images.length !== 0 && (
+          <Button onLoadMore={this.onLoadMore} />
+        )}
+        {status === 'rejected' && <Error />}
+        {isModalOpen && (
+          <Modal largeImage={modalImg} closeModal={this.closeModal} />
         )}
       </>
     );
