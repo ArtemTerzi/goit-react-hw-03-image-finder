@@ -18,11 +18,12 @@ class ImageGallery extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
+    const { page, images } = this.state;
     try {
-      if (this.state.page !== prevState.page && this.state.page !== 1) {
-        fetchData(this.props.query, this.state.page).then(response => {
+      if (page !== prevState.page && page !== 1) {
+        fetchData(this.props.query, page).then(response => {
           this.setState({
-            images: [...this.state.images, ...response.hits],
+            images: [...images, ...response.hits],
             status: 'resolved',
           });
         });
@@ -41,10 +42,7 @@ class ImageGallery extends Component {
             page: 1,
           });
 
-          if (
-            response.totalHits ===
-            this.state.images.length + response.hits.length
-          ) {
+          if (response.totalHits === images.length + response.hits.length) {
             this.setState({ status: 'idle' });
           }
         });
