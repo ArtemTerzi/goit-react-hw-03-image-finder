@@ -18,35 +18,39 @@ class ImageGallery extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.page !== prevState.page && this.state.page !== 1) {
-      fetchData(this.props.query, this.state.page).then(response => {
-        this.setState({
-          images: [...this.state.images, ...response.hits],
-          status: 'resolved',
+    try {
+      if (this.state.page !== prevState.page && this.state.page !== 1) {
+        fetchData(this.props.query, this.state.page).then(response => {
+          this.setState({
+            images: [...this.state.images, ...response.hits],
+            status: 'resolved',
+          });
         });
-      });
-    }
+      }
 
-    if (prevProps.query !== this.props.query) {
-      fetchData(this.props.query, 1).then(response => {
-        if (!response.hits.length) {
-          this.setState({ status: 'rejected' });
-          return;
-        }
+      if (prevProps.query !== this.props.query) {
+        fetchData(this.props.query, 1).then(response => {
+          if (!response.hits.length) {
+            this.setState({ status: 'rejected' });
+            return;
+          }
 
-        this.setState({
-          images: response.hits,
-          status: 'resolved',
-          page: 1,
+          this.setState({
+            images: response.hits,
+            status: 'resolved',
+            page: 1,
+          });
+
+          if (
+            response.totalHits ===
+            this.state.images.length + response.hits.length
+          ) {
+            this.setState({ status: 'idle' });
+          }
         });
-
-        if (
-          response.totalHits ===
-          this.state.images.length + response.hits.length
-        ) {
-          this.setState({ status: 'idle' });
-        }
-      });
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 
