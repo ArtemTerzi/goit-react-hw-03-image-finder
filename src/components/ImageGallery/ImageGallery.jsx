@@ -1,12 +1,12 @@
 import { Component } from 'react';
 import sass from './ImageGallery.module.scss';
-import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
+import ImageGalleryItem from 'components/ImageGalleryItem';
 import { fetchData } from 'helpers/fetchAPI';
-import { Button } from 'components/Button/Button';
-import { Loader } from 'components/Loader/Loader';
-import Modal from 'components/Modal/Modal';
+import Button from 'components/Button';
+import Loader from 'components/Loader';
+import Modal from 'components/Modal';
 import PropTypes from 'prop-types';
-import { Error } from 'components/Error/Error';
+import Error from 'components/Error';
 
 class ImageGallery extends Component {
   state = {
