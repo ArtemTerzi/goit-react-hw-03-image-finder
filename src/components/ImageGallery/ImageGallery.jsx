@@ -6,6 +6,7 @@ import { Button } from 'components/Button/Button';
 import { Loader } from 'components/Loader/Loader';
 import Modal from 'components/Modal/Modal';
 import PropTypes from 'prop-types';
+import { Error } from 'components/Error/Error';
 
 class ImageGallery extends Component {
   state = {
@@ -28,6 +29,11 @@ class ImageGallery extends Component {
 
     if (prevProps.query !== this.props.query) {
       fetchData(this.props.query, 1).then(response => {
+        if (!response.hits.length) {
+          this.setState({ status: 'rejected' });
+          return;
+        }
+
         this.setState({
           images: response.hits,
           status: 'resolved',
@@ -86,6 +92,7 @@ class ImageGallery extends Component {
           this.state.images.length !== 0 && (
             <Button onLoadMore={this.onLoadMore} />
           )}
+        {this.state.status === 'rejected' && <Error />}
         {this.state.isModalOpen && (
           <Modal
             largeImage={this.state.modalImg}
